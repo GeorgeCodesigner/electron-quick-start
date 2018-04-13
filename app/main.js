@@ -1,11 +1,16 @@
-const electron = require('electron')
+const electron = require('electron');
+// const devtron = require('devtron'); //辅助分析程序
 // Module to control application life.
-const app = electron.app
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const app = electron.app;
+// Module to create native browser window.主进程中使用方式
+const BrowserWindow = electron.BrowserWindow;
+/*//渲染进程中使用方式
+const { remote } = require('electron')
+const { BrowserWindow } = remote
+const win = new BrowserWindow()*/
 
-const path = require('path')
-const url = require('url')
+const path = require('path');
+const url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,18 +23,18 @@ function createWindow () {
       height: 600,
       icon:path.join(__dirname, '../assets/image/logo2.png'),
       autoHideMenuBar:true,
-      alwaysOnTop:true,
-      center: true})
+      // alwaysOnTop:true,
+      center: true
+  });
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
-  }))
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  }));
+  // 打开开发者工具。
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -53,6 +58,8 @@ app.on('window-all-closed', function () {
     app.quit()
   }
 })
+//
+// app.setAccessibilitySupportEnabled(true);
 
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
